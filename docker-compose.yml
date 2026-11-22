@@ -1,0 +1,25 @@
+# Local Airflow (standalone, SQLite + SequentialExecutor) with Spark in local mode.
+# UI: http://localhost:8081  user: admin
+# password: docker exec goit-de-fp-airflow cat /opt/airflow/standalone_admin_password.txt
+services:
+  airflow:
+    build: ./docker/airflow
+    image: goit-de-fp-airflow:2.10.5
+    container_name: goit-de-fp-airflow
+    command: standalone
+    ports:
+      - "8081:8080"
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/dags
+      AIRFLOW_CONN_SPARK_DEFAULT: '{"conn_type": "spark", "host": "local[*]"}'
+      DATALAKE_DIR: /opt/airflow/datalake
+    volumes:
+      - ./part2_batch:/opt/airflow/dags
+      - ./datalake:/opt/airflow/datalake
+      - ./docker/airflow/logs:/opt/airflow/logs
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5

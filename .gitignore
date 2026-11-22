@@ -221,3 +221,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+task/
+CLAUDE.md
+
+# Project runtime data
+checkpoints/
+spark-warehouse/
+datalake/
+*.csv
+docker/airflow/logs/
